@@ -5,12 +5,19 @@ import './PlaceItem.css'
 import Card from '../../shared/components/UIElements/Card'
 import Button from '../../shared/components/FormElements/Button'
 import Modal from '../../shared/components/UIElements/Modal'
+import Map from '../../shared/components/UIElements/Map'
 import { useHttpClient } from '../../shared/hooks/http-hook'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 
 const PlaceItem = (props) => {
     const {isLoading,error,sendRequest,clearError}=useHttpClient();
+    const [showMap,setShowMap]=useState(false);
     const [showConfirmModal,setshowConfirmModal]=useState(false)
+
+    const openMapHandler=()=>setShowMap(true)
+
+    const closeMapHandler=()=>setShowMap(false)
+
     const showDeleteWarningHandler=()=>{
         setshowConfirmModal(true)
     }
@@ -37,11 +44,15 @@ const PlaceItem = (props) => {
     <React.Fragment>
         <ErrorModal error={error} onClear={clearError}/>
         <Modal 
+            show={showMap} 
+            onCancel={closeMapHandler} 
             header={props.address} 
             contentClass="place-item__modal-content" 
             footerClass="place-item__modal-actions"
+            footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
         >
             <div className='map-container'>
+                <Map center={props.coordinate} zoom={16} />
             </div>
         </Modal>
 
@@ -73,6 +84,7 @@ const PlaceItem = (props) => {
                 <p>{props.description}</p>
             </div>
             <div className='place-item__actions'>
+                <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
             </div>
         </Card>
         </li>

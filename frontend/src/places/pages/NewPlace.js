@@ -7,9 +7,11 @@ import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/valida
 import Button from '../../shared/components/FormElements/Button'
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 const NewPlace = () => {
+  const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm({
     title: {
@@ -43,6 +45,9 @@ const NewPlace = () => {
         await sendRequest(process.env.REACT_APP_BACKEND_URL+'/places',
         'POST',
         formData,
+        {
+          Authorization:'Bearer '+auth.token
+        }
       );
       history.push('/');
     } catch (err) {

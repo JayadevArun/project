@@ -6,10 +6,14 @@ import NewPlace from './places/pages/NewPlace';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import UserPlaces from './places/pages/UserPlaces';
 import UpdatePlace from './places/pages/UpdatePlace';
+import Auth from './user/pages/Auth';
+import { AuthContext } from './shared/context/auth-context';
+import { useAuth } from './shared/hooks/auth-hook';
 
 //const Users=React.lazy(()=>import('./user/pages/Users'));
 
 const App = () => {
+  const {token,login,logout,userId}=useAuth();
 
   let routes;
 
@@ -41,17 +45,23 @@ const App = () => {
         <Route path="/:userId/places" exact>
           <UserPlaces />
         </Route>
+        <Route path="/auth">
+          <Auth />
+        </Route>
+        <Redirect to="/auth" />
       </Switch>
     )
   }
 
   return (
+  <AuthContext.Provider value={{isLoggedIn:!!token,token:token,userId:userId,login:login,logout:logout}}>
     <Router>
       <MainNavigation />
       <main>
           {routes}
       </main>
     </Router>
+  </AuthContext.Provider>
   
   );
 }

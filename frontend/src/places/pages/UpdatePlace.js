@@ -9,10 +9,12 @@ import './PlaceForm.css'
 import { useForm } from '../../shared/hooks/form-hook'
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { AuthContext } from '../../shared/context/auth-context';
 import { use } from 'react';
 
 
 const UpdatePlace = () => {
+    const auth=useContext(AuthContext);
     const {isLoading,error,sendRequest,clearError}=useHttpClient();
     const [loadedPlace,setLoadedPlace]=useState();
     const placeId=useParams().placeId
@@ -64,6 +66,7 @@ const UpdatePlace = () => {
                 }),
                 {
                     'Content-Type':'application/json',
+                    Authorization:'Bearer '+auth.token
                 }
             );
             history.push('/'+auth.userId+'/places');

@@ -8,6 +8,7 @@ import { VALIDATOR_REQUIRE,VALIDATOR_MINLENGTH } from '../../shared/util/validat
 import './PlaceForm.css'
 import { useForm } from '../../shared/hooks/form-hook'
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { AuthContext } from '../../shared/context/auth-context';
 import { use } from 'react';
@@ -75,6 +76,23 @@ const UpdatePlace = () => {
         }
     };
 
+    if (isLoading){
+        return(
+            <div className='center'>
+                <LoadingSpinner/>
+            </div>
+        )
+    }
+
+    if (!loadedPlace && !error){
+        return(
+            <div className='center'>
+                <Card>
+                    <h2>Could not find place!</h2>
+                </Card>
+            </div>
+        )
+    }
 
   return (
     <React.Fragment>

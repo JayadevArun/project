@@ -7,7 +7,7 @@ WanderSnap is a full-stack social platform built with the MERN (MongoDB, Express
 - User registration and authentication using JWT for secure login and access control.
 - Create and manage places with title, description, location, and uploaded images.
 - Google Maps API integration for accurate address-to-location conversion.
-- View all places created by a specific user and enable role-based permissions to restrict editing/deletion to only the creator, 
+- View user-specific places with edit/delete access restricted to the creator. 
 - Image upload functionality using Multer with backend validation.
 - Responsive design for optimal user experience across devices.
 

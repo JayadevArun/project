@@ -9,6 +9,53 @@ const User=require('../models/user');
 
 const fs=require('fs');
 
+const getPlaceById=async (req,res,next)=>{
+    const placeId=req.params.pid;
+
+    let place;
+    try{
+        place=await Place.findById(placeId);
+    }catch(err){
+        const error=new HttpError(
+            'Somthing went wrong, could not find a place.',
+            500
+        );
+        return next(error);
+    }
+
+    if(!place){
+        const error=new HttpError(
+            'Could not find a place for the provided place id.',
+            404
+        );
+        return next(error);
+    }
+
+    res.json({place:place.toObject({getters:true})});
+};
+
+const getPlacesByUserId=async (req,res,next)=>{
+    const userId=req.params.uid;
+
+    //let places;
+    let userWithPlaces;
+    try{
+        userWithPlaces=await User.findById(userId).populate('places');
+    }catch(err){
+        const error=new HttpError(
+            'Fetching places failed, please try again later.',
+            500
+        );
+        return next(error);
+    }
+    
+    //if(!places || places.length===0)
+    if(!userWithPlaces || userWithPlaces.places.length===0){
+        return next(new HttpError('Could not find places for the provided user id.',404));
+    }
+
+    res.json({places:userWithPlaces.places.map(place=>place.toObject({getters:true}))});
+};
 
 const createPlace=async (req,res,next)=>{
     const errors=validationResult(req);
